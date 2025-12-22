@@ -2,8 +2,8 @@
 source: docs
 title: "Natasha Cordeiro - Advocacia Trabalhista"
 description: "Advocacia Trabalhista em Uberlândia - MG"
-baseurl: ""
-url: "https://ygorsc23.github.io/sem-registro"
+baseurl: "/sem-registro"
+url: "https://ygorsc23.github.io"
 
 # Build settings
 markdown: kramdown
