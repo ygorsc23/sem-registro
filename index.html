@@ -6,7 +6,7 @@
     <title>Advogada Trabalhista | Atendimento Sem Registro e Vínculo - Dra. Natasha</title>
     <meta name="description" content="Trabalha sem carteira assinada? Descubra como comprovar vínculo empregatício e receber FGTS, Férias e Décimo Terceiro. Atendimento 100% online em todo o Brasil. Fale com Dra. Natasha Cordeiro.">
     <meta name="theme-color" content="#0f172a">
-    <link rel="canonical" href="https://ygorsc23.github.io/sem-registro/">
+    <link rel="canonical" href="https://semregistro.natashacordeiro.adv.br/">
     <link rel="icon" href="logo.webp" type="image/webp">
     <link rel="preload" as="image" href="carteira-trabalho.webp">
     <script type="application/ld+json">{"@context":"https://schema.org","@type":"LegalService","name":"Natasha Cordeiro Advocacia e Consultoria","image":"logo.webp","description":"Advocacia especializada em Direito Trabalhista...","address":{"@type":"PostalAddress","streetAddress":"Rua República da Armênia, nº 660","addressLocality":"Fortaleza","addressRegion":"CE","postalCode":"60821-760","addressCountry":"BR"},"telephone":"+5585988699561","priceRange":"$$","areaServed":"BR","sameAs":["https://www.instagram.com/NATASHACORDEIROADV/","https://www.facebook.com/people/Natasha-Cordeiro-Advocacia-e-Consultoria-Jur%C3%ADdica/100094503230979/","https://www.linkedin.com/in/natasha-cordeiro-6b84b421a/","https://www.tiktok.com/@natashacordeiroadv"]}</script>
@@ -94,11 +94,27 @@
         }
     </style>
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-11286707600"></script>
+    <!-- ============================================================
+         TRACKING: GA4 + Google Ads
+         GA4: G-TQ7WH940K9  |  Google Ads: AW-11286707600
+         Consentimento provisorio: concedido (TODO: banner LGPD)
+         ============================================================ -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQ7WH940K9"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
+
+      // Consent Mode v2 — provisorio: concedido para comecar a medir.
+      // TODO: trocar para 'denied' e liberar via banner de consentimento (LGPD).
+      gtag('consent', 'default', {
+        ad_storage: 'granted',
+        ad_user_data: 'granted',
+        ad_personalization: 'granted',
+        analytics_storage: 'granted'
+      });
+
       gtag('js', new Date());
+      gtag('config', 'G-TQ7WH940K9');
       gtag('config', 'AW-11286707600');
     </script>
 
@@ -115,6 +131,57 @@
       });
       return false;
     }
+    </script>
+
+    <!-- Origem do lead (first-touch): gclid, fbclid e UTMs -->
+    <script>
+      (function () {
+        try {
+          var p = new URLSearchParams(window.location.search);
+          var origem = {
+            gclid: p.get('gclid'),
+            fbclid: p.get('fbclid'),
+            utm_source: p.get('utm_source'),
+            utm_medium: p.get('utm_medium'),
+            utm_campaign: p.get('utm_campaign'),
+            utm_content: p.get('utm_content'),
+            utm_term: p.get('utm_term'),
+            landing: window.location.href,
+            em: new Date().toISOString()
+          };
+          var temParametro = Object.keys(origem).some(function (chave) {
+            return chave !== 'landing' && chave !== 'em' && origem[chave];
+          });
+          if (temParametro) {
+            localStorage.setItem('origem_lead', JSON.stringify(origem));
+          }
+        } catch (e) {
+          // localStorage indisponivel (modo privado): segue sem atribuicao
+        }
+      })();
+    </script>
+
+    <!-- Evento unico para todos os CTAs de WhatsApp -->
+    <script>
+      document.addEventListener('click', function (evento) {
+        var alvo = evento.target;
+        var link = alvo && alvo.closest
+          ? alvo.closest('a[href*="api.whatsapp.com"], a[href*="wa.me"]')
+          : null;
+        if (!link) return;
+
+        var rotulo = link.getAttribute('aria-label') || link.className || 'cta';
+        var salvo = null;
+        try { salvo = JSON.parse(localStorage.getItem('origem_lead') || 'null'); } catch (e) {}
+
+        gtag('event', 'whatsapp_click', {
+          origem: rotulo,
+          pagina: window.location.pathname,
+          tem_gclid: salvo && salvo.gclid ? 'sim' : 'nao'
+        });
+
+        if (typeof fbq === 'function') fbq('track', 'Contact');
+      }, true);
     </script>
 </head>
 <body>
@@ -240,6 +307,7 @@
                 <p style="margin-top:10px;color:white">🌍 Atendimento Digital para todo o Brasil</p>
             </div>
             <p style="font-size:.8rem;margin-top:30px;opacity:0.5">Este site tem caráter informativo e não substitui uma consulta jurídica.</p>
+            <p style="font-size:.8rem;margin-top:8px;opacity:0.7"><a href="privacidade.html" style="color:#cbd5e1;text-decoration:underline">Política de Privacidade</a></p>
         </div>
     </footer>
 
