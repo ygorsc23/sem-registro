@@ -146,6 +146,7 @@
             utm_campaign: p.get('utm_campaign'),
             utm_content: p.get('utm_content'),
             utm_term: p.get('utm_term'),
+            grupo: p.get('g') || p.get('utm_content'),
             landing: window.location.href,
             em: new Date().toISOString()
           };
@@ -177,12 +178,44 @@
         gtag('event', 'whatsapp_click', {
           origem: rotulo,
           pagina: window.location.pathname,
+          grupo: (salvo && salvo.grupo) || '',
           tem_gclid: salvo && salvo.gclid ? 'sim' : 'nao'
         });
 
         if (typeof fbq === 'function') fbq('track', 'Contact');
       }, true);
     </script>
+
+    <!-- Identificacao do grupo de anuncios -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        var CODIGOS = {
+          'verbas-rescisorias': 'SR-VB',
+          'sem-registro': 'SR-REG',
+          'fgts-nao-depositado': 'SR-FGTS',
+          'acidente-de-trabalho': 'AC-AT',
+          'estabilidade-e-demissao': 'AC-EST',
+          'doenca-ocupacional': 'AC-DOC'
+        };
+        var p = new URLSearchParams(window.location.search);
+        var bruto = p.get('g') || p.get('utm_content');
+        if (!bruto) return;
+        var g = CODIGOS[bruto] || bruto.toUpperCase().replace(/[^A-Z0-9-]/g, '').slice(0, 12);
+        if (!g) return;
+
+        document.querySelectorAll('a[href*="api.whatsapp.com"], a[href*="wa.me"]').forEach(function (a) {
+          var u = new URL(a.href);
+          var texto = u.searchParams.get('text') || '';
+          if (texto.indexOf('[' + g + ']') === -1) {
+            u.searchParams.set('text', texto + ' [' + g + ']');
+          }
+          a.href = u.toString();
+          a.setAttribute('data-grupo', g);
+          a.setAttribute('onclick', "return gtag_report_conversion(this.href);");
+        });
+      });
+    </script>
+
 </head>
 <body>
     <header>
